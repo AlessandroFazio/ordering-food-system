@@ -1,0 +1,37 @@
+version: '3.7'
+
+services:
+  init-kafka:
+    image: confluentinc/cp-kafka:${KAFKA_VERSION}
+    entrypoint: ["/bin/sh", "-c"]
+    command: |
+      "
+      echo -e 'Deleting kafka topics'
+      kafka-topics --bootstrap-server kafka1:19092,kafka2:29092 --topic payment-request --delete --if-exists
+      kafka-topics --bootstrap-server kafka1:19092,kafka2:29092 --topic payment-response --delete --if-exists
+      kafka-topics --bootstrap-server kafka1:19092,kafka2:29092 --topic restaurant-approval-request --delete --if-exists
+      kafka-topics --bootstrap-server kafka1:19092,kafka2:29092 --topic restaurant-approval-response --delete --if-exists
+      
+      echo -e 'Creating kafka topics'
+      kafka-topics --bootstrap-server kafka1:19092,kafka2:29092 --topic payment-request --create --if-not-exists --replication-factor 3 --partitions 3
+      kafka-topics --bootstrap-server kafka1:19092,kafka2:29092 --topic payment-response --create --if-not-exists --replication-factor 3 --partitions 3
+      kafka-topics --bootstrap-server kafka1:19092,kafka2:29092 --topic restaurant-approval-request --create --if-not-exists --replication-factor 3 --partitions 3
+      kafka-topics --bootstrap-server kafka1:19092,kafka2:29092 --topic restaurant-approval-response --create --if-not-exists --replication-factor 3 --partitions 3
+      
+      echo -e 'Successfully created the following topics:'
+      kafka-topics --bootstrap-server kafka1:19092,kafka2:29092 --list
+      "
+    depends_on:
+      kafka1:
+        condition: service_healthy
+      kafka2:
+        condition: service_healthy
+      kafka3:
+        condition: service_healthy
+    networks:
+      - ${GLOBAL_NETWORK}
+
+networks:
+  food-ordering-system:
+    external: true
+

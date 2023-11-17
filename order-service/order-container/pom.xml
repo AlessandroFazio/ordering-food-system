@@ -8,8 +8,6 @@
     </parent>
     <artifactId>order-container</artifactId>
 
-    <properties></properties>
-
     <dependencies>
         <dependency>
             <groupId>github.alessandrofazio</groupId>
@@ -30,6 +28,10 @@
         <dependency>
             <groupId>github.alessandrofazio</groupId>
             <artifactId>order-messaging</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
         </dependency>
     </dependencies>
 </project>

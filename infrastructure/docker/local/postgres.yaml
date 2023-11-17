@@ -1,0 +1,53 @@
+version: '3.7'
+
+services:
+  postgres:
+    image: postgres:14.0-alpine
+    hostname: postgres
+    container_name: postgres
+    healthcheck:
+      test: nc -z localhost:5432
+      interval: 10s
+      retries: 5
+      start_period: 20s
+      timeout: 10s
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+    ports:
+      - "5432:5432"
+    networks:
+      - ${GLOBAL_NETWORK}
+    volumes:
+      - "food_ordering_db:/var/lib/postgresql/data"
+
+  pg-admin:
+    image: dpage/pgadmin4:latest
+    hostname: pgadmin
+    container_name: pgadmin
+    healthcheck:
+      test: nc -z localhost:5678
+      start_period: 20s
+      interval: 10s
+      retries: 3
+      timeout: 10s
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=fazioale2000@gmail.com
+      - PGADMIN_DEFAULT_USER=alessandrofazio
+      - PGADMIN_DEFAULT_PASSWORD=admin
+      - PGADMIN_LISTEN_PORT=5050
+      - PGADMIN_SERVER_MODE=1
+      - PGADMIN_CONFIG_CONSOLE_LOG_LEVEL=5
+    ports:
+      - "5050:5050"
+    networks:
+      - ${GLOBAL_NETWORK}
+
+volumes:
+  food_ordering_db:
+    driver: local
+
+networks:
+  food-ordering-system:
+    external: true

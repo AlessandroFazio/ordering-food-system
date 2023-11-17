@@ -1,0 +1,44 @@
+version: '3.7'
+
+services:
+  control-center:
+    image: confluentinc/cp-enterprise-control-center:${KAFKA_VERSION}
+    hostname: control-center
+    container_name: control-center
+    healthcheck:
+      test: nc -z localhost 9021
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+    depends_on:
+      kafka1:
+        condition: service_healthy
+      kafka2:
+        condition: service_healthy
+      kafka3:
+        condition: service_healthy
+      schema-registry:
+        condition: service_healthy
+    ports:
+      - "9021:9021"
+    environment:
+      CONTROL_CENTER_BOOTSTRAP_SERVERS: PLAINTEXT://kafka1:19092,PLAINTEXT://kafka2:29092,PLAINTEXT://kafka3:39092
+      CONTROL_CENTER_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
+      CONTROL_CENTER_REPLICATION_FACTOR: 2
+      CONTROL_CENTER_INTERNAL_TOPICS_PARTITIONS: 2
+      CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS: 2
+      CONFLUENT_METRICS_TOPIC_REPLICATION: 2
+      PORT: 9021
+    networks:
+      - ${GLOBAL_NETWORK}
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 3s
+        max_attempts: 3
+        window: 90s
+
+networks:
+  food-ordering-system:
+    external: true

@@ -1,0 +1,168 @@
+version: '3.7'
+
+services:
+  kafka1:
+    image: confluentinc/cp-server:${KAFKA_VERSION}
+    container_name: kafka1
+    hostname: kafka1
+    user: '0:0'
+    healthcheck:
+      test: nc -z localhost 19092
+      interval: 10s
+      timeout: 10s
+      start_period: 20s
+      retries: 3
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    ports:
+      - "19092:19092"
+    environment:
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka1:19092,PLAINTEXT_HOST://localhost:9092
+      - KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:19092,PLAINTEXT_HOST://0.0.0.0:9092
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      - KAFKA_COMPRESSION_TYPE=producer
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_BROKER_ID=1
+      - BOOTSTRAP_SERVERS=kafka1:19092,kafka2:29092,kafka3:39092
+      - KAFKA_METRIC_REPORTERS=io.confluent.metrics.reporter.ConfluentMetricsReporter
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=2
+      - KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS=0
+      - KAFKA_CONFLUENT_LICENSE_TOPIC_REPLICATION_FACTOR=2
+      - KAFKA_CONFLUENT_BALANCER_TOPIC_REPLICATION_FACTOR=2
+      - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=2
+      - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=2
+      - KAFKA_JMX_PORT=9101
+      - KAFKA_JMX_HOSTNAME=localhost
+      - KAFKA_CONFLUENT_SCHEMA_REGISTRY_URL=http://schema-registry:8081
+      - CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS=kafka1:19092,kafka2:29092,kafka3:39092
+      - CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS=2
+      - CONFLUENT_METRICS_ENABLE='true'
+      - CONFLUENT_SUPPORT_CUSTOMER_ID='anonymous'
+      - KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND=true
+    volumes:
+      - "food-ordering-kafka1:/var/lib/kafka/data"
+    networks:
+      - ${GLOBAL_NETWORK}
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 3s
+        max_attempts: 3
+        window: 90s
+
+  kafka2:
+    image: confluentinc/cp-server:${KAFKA_VERSION}
+    container_name: kafka2
+    hostname: kafka2
+    user: '0:0'
+    healthcheck:
+      test: nc -z localhost 29092
+      interval: 10s
+      timeout: 10s
+      start_period: 20s
+      retries: 3
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    ports:
+      - "29092:29092"
+    environment:
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka2:29092
+      - KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:29092,PLAINTEXT_HOST://0.0.0.0:9092
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      - KAFKA_COMPRESSION_TYPE=producer
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_BROKER_ID=2
+      - BOOTSTRAP_SERVERS=kafka1:19092,kafka2:29092,kafka3:39092
+      - KAFKA_METRIC_REPORTERS=io.confluent.metrics.reporter.ConfluentMetricsReporter
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=2
+      - KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS=0
+      - KAFKA_CONFLUENT_LICENSE_TOPIC_REPLICATION_FACTOR=2
+      - KAFKA_CONFLUENT_BALANCER_TOPIC_REPLICATION_FACTOR=2
+      - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=2
+      - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=2
+      - KAFKA_JMX_PORT=9101
+      - KAFKA_JMX_HOSTNAME=localhost
+      - KAFKA_CONFLUENT_SCHEMA_REGISTRY_URL=http://schema-registry:8081
+      - CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS=kafka1:19092,kafka2:29092,kafka3:39092
+      - CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS=2
+      - CONFLUENT_METRICS_ENABLE='true'
+      - CONFLUENT_SUPPORT_CUSTOMER_ID='anonymous'
+      - KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND=true
+    volumes:
+      - "food-ordering-kafka2:/var/lib/kafka/data"
+    networks:
+      - ${GLOBAL_NETWORK}
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 3s
+        max_attempts: 3
+        window: 90s
+
+  kafka3:
+    image: confluentinc/cp-server:${KAFKA_VERSION}
+    container_name: kafka3
+    hostname: kafka3
+    user: '0:0'
+    healthcheck:
+      test: nc -z localhost 39092
+      interval: 10s
+      timeout: 10s
+      start_period: 20s
+      retries: 3
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    ports:
+      - "39092:39092"
+    environment:
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka3:39092
+      - KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:39092,PLAINTEXT_HOST://0.0.0.0:9092
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      - KAFKA_COMPRESSION_TYPE=producer
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_BROKER_ID=3
+      - BOOTSTRAP_SERVERS=kafka1:19092,kafka2:29092,kafka3:39092
+      - KAFKA_METRIC_REPORTERS=io.confluent.metrics.reporter.ConfluentMetricsReporter
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=2
+      - KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS=0
+      - KAFKA_CONFLUENT_LICENSE_TOPIC_REPLICATION_FACTOR=2
+      - KAFKA_CONFLUENT_BALANCER_TOPIC_REPLICATION_FACTOR=2
+      - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=2
+      - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=2
+      - KAFKA_JMX_PORT=9101
+      - KAFKA_JMX_HOSTNAME=localhost
+      - KAFKA_CONFLUENT_SCHEMA_REGISTRY_URL=http://schema-registry:8081
+      - CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS=kafka1:19092,kafka2:29092,kafka3:39092
+      - CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS=2
+      - CONFLUENT_METRICS_ENABLE='true'
+      - CONFLUENT_SUPPORT_CUSTOMER_ID='anonymous'
+      - KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND=true
+    volumes:
+      - "food-ordering-kafka3:/var/lib/kafka/data"
+    networks:
+      - ${GLOBAL_NETWORK}
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 3s
+        max_attempts: 3
+        window: 90s
+
+volumes:
+  food-ordering-kafka1:
+    driver: local
+  food-ordering-kafka2:
+    driver: local
+  food-ordering-kafka3:
+    driver: local
+
+networks:
+  food-ordering-system:
+    external: true
+

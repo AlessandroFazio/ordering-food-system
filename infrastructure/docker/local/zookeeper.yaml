@@ -1,0 +1,41 @@
+version: '3.7'
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:${KAFKA_VERSION}
+    container_name: zookeeper
+    hostname: zookeeper
+    ports:
+    - "2181:2181"
+    - "2888:2888"
+    - "3888:3888"
+    healthcheck:
+      test: echo stat | nc localhost 2181
+      interval: 10s
+      timeout: 10s
+      retries: 3
+    environment:
+    - ZOOKEEPER_SERVER_ID=1
+    - ZOOKEEPER_CLIENT_PORT=2181
+    - ZOOKEEPER_TICK_TIME=2000
+    volumes:
+      - "food-ordering-zookeeper-data:/var/lib/zookeeper/data"
+      - "food-ordering-zookeeper-transactions:/var/lib/zookeeper/log"
+    networks:
+      - ${GLOBAL_NETWORK}
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 3s
+        max_attempts: 5
+        window: 120s
+
+volumes:
+  food-ordering-zookeeper-data:
+    driver: local
+  food-ordering-zookeeper-transactions:
+    driver: local
+
+networks:
+  food-ordering-system:
+    external: true

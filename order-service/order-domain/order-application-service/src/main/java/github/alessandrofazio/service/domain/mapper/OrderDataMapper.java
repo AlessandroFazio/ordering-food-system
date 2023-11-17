@@ -12,9 +12,11 @@ import github.alessandrofazio.order.service.domain.valueobject.StreetAddress;
 import github.alessandrofazio.service.domain.dto.create.CreateOrderCommand;
 import github.alessandrofazio.service.domain.dto.create.CreateOrderResponse;
 import github.alessandrofazio.service.domain.dto.create.OrderAddress;
+import github.alessandrofazio.service.domain.dto.track.TrackOrderResponse;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -38,10 +40,11 @@ public class OrderDataMapper {
                 .build();
     }
 
-    public CreateOrderResponse orderToCreateOrderResponse(Order order) {
+    public CreateOrderResponse orderToCreateOrderResponse(Order order, String message) {
         return CreateOrderResponse.builder()
                 .orderTrackingId(order.getTrackingId().getValue())
                 .orderStatus(order.getOrderStatus())
+                .message(message)
                 .build();
     }
 
@@ -63,5 +66,13 @@ public class OrderDataMapper {
                 orderAddress.getStreet(),
                 orderAddress.getPostalCode(),
                 orderAddress.getCity());
+    }
+
+    public TrackOrderResponse orderToTrackOrderResponse(Order order) {
+        return TrackOrderResponse.builder()
+                .orderTrackingId(order.getTrackingId().getValue())
+                .orderStatus(order.getOrderStatus())
+                .failureMessages(order.getFailureMessages())
+                .build();
     }
 }
