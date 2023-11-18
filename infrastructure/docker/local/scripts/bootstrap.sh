@@ -9,9 +9,11 @@ else
   export GROUP_ID=food.ordering.system
 fi
 
+source "$(pwd)/scripts/delete-local-volumes.sh"
+
 if ! docker network inspect ${GLOBAL_NETWORK} &> /dev/null; then
     echo "Creating Global Network: ${GLOBAL_NETWORK}"
-    docker network create --driver bridge "${GLOBAL_NETWORK}"
+    docker network create --driver bridge "${GLOBAL_NETWORK}";
 else
     echo "Global Network: ${GLOBAL_NETWORK} already exists"
 fi

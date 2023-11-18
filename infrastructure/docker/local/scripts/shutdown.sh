@@ -10,3 +10,5 @@ docker-compose \
   -f init_kafka.yaml \
   -f postgres.yaml \
   down
+
+source "$(pwd)/scripts/delete-local-volumes.sh"
