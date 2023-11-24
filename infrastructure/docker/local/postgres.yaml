@@ -27,7 +27,7 @@ services:
     hostname: pgadmin
     container_name: pgadmin
     healthcheck:
-      test: nc -z localhost:5678
+      test: nc -z localhost:5050
       start_period: 20s
       interval: 10s
       retries: 3

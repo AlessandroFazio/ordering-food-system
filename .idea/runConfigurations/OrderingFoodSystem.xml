@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="OrderingFoodSystem" type="CompoundRunConfigurationType">
+    <toRun name="CustomerServiceApplication" type="Application" />
+    <toRun name="OrderServiceApplication" type="Application" />
+    <toRun name="PaymentServiceApplication" type="Application" />
+    <toRun name="RestaurantServiceApplication" type="Application" />
+    <method v="2" />
+  </configuration>
+</component>
