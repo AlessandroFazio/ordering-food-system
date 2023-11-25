@@ -1,0 +1,19 @@
+{
+  "name": "restaurant-order-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "tasks.max": "1",
+    "database.hostname": "postgres",
+    "database.port": "5432",
+    "database.user": "debezium",
+    "database.password": "debezium_password",
+    "database.dbname": "postgres",
+    "database.server.name": "postgres",
+    "table.include.list": "restaurant.order_outbox",
+    "topic.prefix": "debezium",
+    "tombstone.on.delete": "false",
+    "slot.name": "debezium_restaurant_order_outbox_slot",
+    "plugin.name": "pgoutput",
+    "publication.name": "debezium_restaurant_order_outbox_pub"
+  }
+}

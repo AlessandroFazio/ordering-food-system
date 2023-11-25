@@ -15,12 +15,15 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=admin
+      - PSQL_HBA_CONF_FILEPATH=/var/lib/postgresql/data/pg_hba.conf
+      - PSQL_CONF_FILEPATH=/var/lib/postgresql/data/postgresql.conf
     ports:
       - "5432:5432"
     networks:
       - ${GLOBAL_NETWORK}
     volumes:
       - "food_ordering_db:/var/lib/postgresql/data"
+      - "./scripts/db:/docker-entrypoint-initdb.d"
 
   pg-admin:
     image: dpage/pgadmin4:latest

@@ -1,0 +1,89 @@
++ docker-compose -f zookeeper.yaml -f kafka.yaml -f schema-registry.yaml -f control-center.yaml -f init_kafka.yaml -f postgres.yaml -f connect.yaml down
+The following deploy sub-keys are not supported and have been ignored: restart_policy.delay, restart_policy.window
+The following deploy sub-keys are not supported and have been ignored: restart_policy.delay, restart_policy.window
+The following deploy sub-keys are not supported and have been ignored: restart_policy.delay, restart_policy.window
+The following deploy sub-keys are not supported and have been ignored: restart_policy.delay, restart_policy.window
+The following deploy sub-keys are not supported and have been ignored: restart_policy.delay, restart_policy.window
+The following deploy sub-keys are not supported and have been ignored: restart_policy.delay, restart_policy.window
+The following deploy sub-keys are not supported and have been ignored: restart_policy.delay, restart_policy.window
+Stopping control-center   ... 
+Stopping debezium-connect ... 
+Stopping schema-registry  ... 
+Stopping kafka1           ... 
+Stopping kafka3           ... 
+Stopping kafka2           ... 
+Stopping zookeeper        ... 
+Stopping postgres         ... 
+Stopping pgadmin          ... 
+Stopping postgres         ... done
+Stopping pgadmin          ... done
+Stopping control-center   ... done
+Stopping debezium-connect ... done
+Stopping schema-registry  ... done
+Stopping kafka3           ... done
+Stopping kafka2           ... done
+Stopping kafka1           ... done
+Stopping zookeeper        ... done
+Removing control-center             ... 
+Removing create-debezium-connectors ... 
+Removing debezium-connect           ... 
+Removing schema-registry            ... 
+Removing local_init-kafka_1         ... 
+Removing kafka1                     ... 
+Removing kafka3                     ... 
+Removing kafka2                     ... 
+Removing zookeeper                  ... 
+Removing postgres                   ... 
+Removing pgadmin                    ... 
+Removing local_init-kafka_1         ... done
+Removing kafka2                     ... done
+Removing zookeeper                  ... done
+Removing schema-registry            ... done
+Removing control-center             ... done
+Removing postgres                   ... done
+Removing kafka3                     ... done
+Removing kafka1                     ... done
+Removing debezium-connect           ... done
+Removing create-debezium-connectors ... done
+Removing pgadmin                    ... done
+Network food-ordering-system is external, skipping
+++ pwd
++ source /home/alessandrofazio/Projects/ordering-food-system/infrastructure/docker/local/scripts/utils/delete-local-volumes.sh
+++ set -xe
+++ volume_names=("local_food-ordering-kafka1" "local_food-ordering-kafka2" "local_food-ordering-kafka3" "local_food-ordering-zookeeper-data" "local_food-ordering-zookeeper-transactions" "local_food_ordering_db")
+++ for vol in "${volume_names[@]}"
+++ docker volume inspect local_food-ordering-kafka1
+++ echo 'Deleting existent docker volume: local_food-ordering-kafka1'
+Deleting existent docker volume: local_food-ordering-kafka1
+++ docker volume rm local_food-ordering-kafka1
+local_food-ordering-kafka1
+++ for vol in "${volume_names[@]}"
+++ docker volume inspect local_food-ordering-kafka2
+++ echo 'Deleting existent docker volume: local_food-ordering-kafka2'
+Deleting existent docker volume: local_food-ordering-kafka2
+++ docker volume rm local_food-ordering-kafka2
+local_food-ordering-kafka2
+++ for vol in "${volume_names[@]}"
+++ docker volume inspect local_food-ordering-kafka3
+++ echo 'Deleting existent docker volume: local_food-ordering-kafka3'
+Deleting existent docker volume: local_food-ordering-kafka3
+++ docker volume rm local_food-ordering-kafka3
+local_food-ordering-kafka3
+++ for vol in "${volume_names[@]}"
+++ docker volume inspect local_food-ordering-zookeeper-data
+++ echo 'Deleting existent docker volume: local_food-ordering-zookeeper-data'
+Deleting existent docker volume: local_food-ordering-zookeeper-data
+++ docker volume rm local_food-ordering-zookeeper-data
+local_food-ordering-zookeeper-data
+++ for vol in "${volume_names[@]}"
+++ docker volume inspect local_food-ordering-zookeeper-transactions
+++ echo 'Deleting existent docker volume: local_food-ordering-zookeeper-transactions'
+Deleting existent docker volume: local_food-ordering-zookeeper-transactions
+++ docker volume rm local_food-ordering-zookeeper-transactions
+local_food-ordering-zookeeper-transactions
+++ for vol in "${volume_names[@]}"
+++ docker volume inspect local_food_ordering_db
+++ echo 'Deleting existent docker volume: local_food_ordering_db'
+Deleting existent docker volume: local_food_ordering_db
+++ docker volume rm local_food_ordering_db
+local_food_ordering_db

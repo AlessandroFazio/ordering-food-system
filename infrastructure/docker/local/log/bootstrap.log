@@ -1,0 +1,79 @@
++ [[ -f .env ]]
++ source .env
+++ KAFKA_VERSION=7.5.0
+++ AVRO_VERSION=1.11.3
+++ DEBEZIUM_VERSION=2.2
+++ GUAVA_VERSION=12.0
+++ DEBEZIUM_TARGET_LOCAL_DIR=/home/alessandrofazio/debezium-connector/avro
+++ GLOBAL_NETWORK=food-ordering-system
+++ GROUP_ID=com.food.ordering.system
+++ KAFKA_CONNECT_HOSTPORT=localhost:8083
+++ KAFKA_CONNECT_CONNECTOR_CONFIG_DIR=/home/alessandrofazio/Projects/ordering-food-system/infrastructure/docker/local/scripts/connectors
++ [[ ! -d /home/alessandrofazio/debezium-connector/avro ]]
+++ pwd
++ source /home/alessandrofazio/Projects/ordering-food-system/infrastructure/docker/local/scripts/utils/delete-local-volumes.sh
+++ set -xe
+++ volume_names=("local_food-ordering-kafka1" "local_food-ordering-kafka2" "local_food-ordering-kafka3" "local_food-ordering-zookeeper-data" "local_food-ordering-zookeeper-transactions" "local_food_ordering_db")
+++ for vol in "${volume_names[@]}"
+++ docker volume inspect local_food-ordering-kafka1
+++ echo 'Volume does not exist: local_food-ordering-kafka1'
+Volume does not exist: local_food-ordering-kafka1
+++ for vol in "${volume_names[@]}"
+++ docker volume inspect local_food-ordering-kafka2
+++ echo 'Volume does not exist: local_food-ordering-kafka2'
+Volume does not exist: local_food-ordering-kafka2
+++ for vol in "${volume_names[@]}"
+++ docker volume inspect local_food-ordering-kafka3
+++ echo 'Volume does not exist: local_food-ordering-kafka3'
+Volume does not exist: local_food-ordering-kafka3
+++ for vol in "${volume_names[@]}"
+++ docker volume inspect local_food-ordering-zookeeper-data
+++ echo 'Volume does not exist: local_food-ordering-zookeeper-data'
+Volume does not exist: local_food-ordering-zookeeper-data
+++ for vol in "${volume_names[@]}"
+++ docker volume inspect local_food-ordering-zookeeper-transactions
+++ echo 'Volume does not exist: local_food-ordering-zookeeper-transactions'
+Volume does not exist: local_food-ordering-zookeeper-transactions
+++ for vol in "${volume_names[@]}"
+++ docker volume inspect local_food_ordering_db
+++ echo 'Volume does not exist: local_food_ordering_db'
+Volume does not exist: local_food_ordering_db
++ docker network inspect food-ordering-system
++ echo 'Global Network: food-ordering-system already exists'
+Global Network: food-ordering-system already exists
++ docker-compose -f zookeeper.yaml -f kafka.yaml -f schema-registry.yaml -f control-center.yaml -f init_kafka.yaml -f postgres.yaml -f connect.yaml up -d
+The following deploy sub-keys are not supported and have been ignored: restart_policy.delay, restart_policy.window
+The following deploy sub-keys are not supported and have been ignored: restart_policy.delay, restart_policy.window
+The following deploy sub-keys are not supported and have been ignored: restart_policy.delay, restart_policy.window
+The following deploy sub-keys are not supported and have been ignored: restart_policy.delay, restart_policy.window
+The following deploy sub-keys are not supported and have been ignored: restart_policy.delay, restart_policy.window
+The following deploy sub-keys are not supported and have been ignored: restart_policy.delay, restart_policy.window
+The following deploy sub-keys are not supported and have been ignored: restart_policy.delay, restart_policy.window
+Creating volume "local_food-ordering-zookeeper-data" with local driver
+Creating volume "local_food-ordering-zookeeper-transactions" with local driver
+Creating volume "local_food-ordering-kafka1" with local driver
+Creating volume "local_food-ordering-kafka2" with local driver
+Creating volume "local_food-ordering-kafka3" with local driver
+Creating volume "local_food_ordering_db" with local driver
+Creating zookeeper ... 
+Creating postgres  ... 
+Creating pgadmin   ... 
+Creating postgres  ... done
+Creating zookeeper ... done
+Creating pgadmin   ... done
+Creating kafka3    ... 
+Creating kafka2    ... 
+Creating kafka1    ... 
+Creating kafka3    ... done
+Creating kafka2    ... done
+Creating kafka1    ... done
+Creating schema-registry ... 
+Creating local_init-kafka_1 ... 
+Creating schema-registry    ... done
+Creating local_init-kafka_1 ... done
+Creating debezium-connect   ... 
+Creating debezium-connect   ... done
+Creating create-debezium-connectors ... 
+Creating control-center             ... 
+Creating create-debezium-connectors ... done
+Creating control-center             ... done
