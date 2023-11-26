@@ -14,6 +14,9 @@
     "tombstone.on.delete": "false",
     "slot.name": "debezium_restaurant_order_outbox_slot",
     "plugin.name": "pgoutput",
-    "publication.name": "debezium_restaurant_order_outbox_pub"
+    "publication.name": "debezium_restaurant_order_outbox_pub",
+    "key.converter.schemas.enable": "false",
+    "message.key.columns": "restaurant.order_outbox:saga_id",
+    "publication.autocreate.mode": "disabled"
   }
 }

@@ -14,6 +14,8 @@
     "tombstone.on.delete": "false",
     "slot.name": "debezium_order_payment_outbox_slot",
     "plugin.name": "pgoutput",
-    "publication.name": "debezium_order_payment_outbox_pub"
+    "publication.name": "debezium_order_payment_outbox_pub",
+    "message.key.columns": "order.payment_outbox:saga_id",
+    "publication.autocreate.mode": "disabled"
   }
 }

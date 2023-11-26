@@ -2,6 +2,10 @@
 
 set -xe
 
+if [[ ! -d "$(pwd)/log" ]]; then
+  mkdir -p "$(pwd)/log"
+fi
+
 # Redirect stdout and stderr to a file and also to the terminal
 exec > >(tee log/bootstrap.log)
 exec 2>&1
