@@ -1,8 +1,8 @@
-package github.alessandrofazio.payment.service.domain.outbox.scheduler;
+package github.alessandrofazio.restaurant.service.domain.outbox.scheduler;
 
 import github.alessandrofazio.outbox.OutboxScheduler;
 import github.alessandrofazio.outbox.OutboxStatus;
-import github.alessandrofazio.payment.service.domain.outbox.model.OrderOutboxMessage;
+import github.alessandrofazio.restaurant.service.domain.outbox.model.OrderOutboxMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;

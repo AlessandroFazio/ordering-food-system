@@ -2,7 +2,7 @@ package github.alessandrofazio.customer.service.domain.ports.output.message.publ
 
 import github.alessandrofazio.customer.service.domain.event.CustomerCreatedEvent;
 
-public interface CustomerRequestMessagePublisher {
+public interface CustomerMessagePublisher {
 
     void publish(CustomerCreatedEvent customerCreatedEvent);
 }

@@ -1,5 +1,6 @@
 package github.alessandrofazio.order.data.access.order.adapter;
 
+import github.alessandrofazio.domain.valueobject.OrderId;
 import github.alessandrofazio.order.data.access.order.entity.OrderEntity;
 import github.alessandrofazio.order.data.access.order.mapper.OrderDataAccessMapper;
 import github.alessandrofazio.order.data.access.order.repository.OrderJpaRepository;
@@ -23,6 +24,12 @@ public class OrderRepositoryImpl implements OrderRepository {
         OrderEntity orderEntity = orderJpaRepository.save(
                 orderDataAccessMapper.orderToOrderEntity(order));
         return orderDataAccessMapper.orderEntityToOrder(orderEntity);
+    }
+
+    @Override
+    public Optional<Order> findById(OrderId orderId) {
+        return orderJpaRepository.findById(orderId.getValue())
+                .map(orderDataAccessMapper::orderEntityToOrder);
     }
 
     @Override

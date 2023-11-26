@@ -30,6 +30,7 @@
                 <artifactId>spring-kafka</artifactId>
                 <version>${spring-kafka.version}</version>
             </dependency>
+
             <!-- https://mvnrepository.com/artifact/io.confluent/kafka-avro-serializer -->
             <dependency>
                 <groupId>io.confluent</groupId>

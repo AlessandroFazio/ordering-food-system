@@ -1,9 +1,9 @@
-package github.alessandrofazio.payment.service.domain.outbox.scheduler;
+package github.alessandrofazio.restaurant.service.domain.outbox.scheduler;
 
 import github.alessandrofazio.outbox.OutboxScheduler;
 import github.alessandrofazio.outbox.OutboxStatus;
-import github.alessandrofazio.payment.service.domain.outbox.model.OrderOutboxMessage;
-import github.alessandrofazio.payment.service.domain.ports.output.message.publisher.PaymentResponseMessagePublisher;
+import github.alessandrofazio.restaurant.service.domain.outbox.model.OrderOutboxMessage;
+import github.alessandrofazio.restaurant.service.domain.ports.output.message.publisher.RestaurantApprovalResponseMessagePublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -19,12 +19,12 @@ import java.util.stream.Collectors;
 public class OrderOutboxScheduler implements OutboxScheduler {
 
     private final OrderOutboxHelper orderOutboxHelper;
-    private final PaymentResponseMessagePublisher paymentResponseMessagePublisher;
+    private final RestaurantApprovalResponseMessagePublisher restaurantApprovalResponseMessagePublisher;
 
     @Override
     @Transactional
-    @Scheduled(fixedRateString = "${payment-service.outbox-scheduler-fixed-rate}",
-            initialDelayString = "${payment-service.outbox-scheduler-initial-delay}")
+    @Scheduled(fixedRateString = "${restaurant-service.outbox-scheduler-fixed-rate}",
+            initialDelayString = "${restaurant-service.outbox-scheduler-initial-delay}")
     public void processOutboxMessage() {
         List<OrderOutboxMessage> orderOutboxMessages =
                 orderOutboxHelper.getOrderOutboxMessageByOutboxStatus(OutboxStatus.STARTED);
@@ -35,10 +35,8 @@ public class OrderOutboxScheduler implements OutboxScheduler {
                         orderOutboxMessage.getId().toString()).collect(Collectors.joining(",")));
 
             orderOutboxMessages.forEach(message ->
-                    paymentResponseMessagePublisher.publish(message, orderOutboxHelper::updateOutboxMessage));
-            log.info("{} OrderOutboxMessage sant to message bus", orderOutboxMessages.size());
+                    restaurantApprovalResponseMessagePublisher.publish(message, orderOutboxHelper::updateOutboxMessage));
+            log.info("{} OrderOutboxMessage sent to message bus", orderOutboxMessages.size());
         }
-
-
     }
 }

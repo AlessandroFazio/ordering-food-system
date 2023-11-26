@@ -1,13 +1,13 @@
-package github.alessandrofazio.payment.service.domain.outbox.scheduler;
+package github.alessandrofazio.restaurant.service.domain.outbox.scheduler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import github.alessandrofazio.domain.valueobject.PaymentStatus;
+import github.alessandrofazio.domain.valueobject.OrderApprovalStatus;
 import github.alessandrofazio.outbox.OutboxStatus;
-import github.alessandrofazio.payment.service.domain.exception.PaymentDomainException;
-import github.alessandrofazio.payment.service.domain.outbox.model.OrderEventPayload;
-import github.alessandrofazio.payment.service.domain.outbox.model.OrderOutboxMessage;
-import github.alessandrofazio.payment.service.domain.ports.output.repository.OrderOutboxRepository;
+import github.alessandrofazio.restaurant.service.domain.exception.RestaurantDomainException;
+import github.alessandrofazio.restaurant.service.domain.outbox.model.OrderEventPayload;
+import github.alessandrofazio.restaurant.service.domain.outbox.model.OrderOutboxMessage;
+import github.alessandrofazio.restaurant.service.domain.ports.output.repository.OrderOutboxRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -31,10 +31,10 @@ public class OrderOutboxHelper {
     private final ObjectMapper objectMapper;
 
     @Transactional(readOnly = true)
-    public Optional<OrderOutboxMessage> getCompletedOrderOutboxMessageBySagaIdAndPaymentStatus(
-            UUID sagaId, PaymentStatus paymentStatus) {
-        return orderOutboxRepository.findByTypeAndSagaIdAndPaymentStatusAndOutboxStatus(
-                ORDER_SAGA_NAME, sagaId, paymentStatus, OutboxStatus.COMPLETED);
+    public Optional<OrderOutboxMessage> getCompletedOrderOutboxMessageBySagaIdAndOutboxStatus(
+            UUID sagaId, OutboxStatus outboxStatus) {
+        return orderOutboxRepository.findByTypeAndSagaIdAndOutboxStatus(
+                ORDER_SAGA_NAME, sagaId, outboxStatus);
     }
 
     @Transactional(readOnly = true)
@@ -47,8 +47,9 @@ public class OrderOutboxHelper {
         orderOutboxRepository.deleteByTypeAndOutboxStatus(ORDER_SAGA_NAME, outboxStatus);
     }
 
+    @Transactional
     public void saveOrderOutboxMessage(
-            OrderEventPayload orderEventPayload, PaymentStatus paymentStatus, OutboxStatus outboxStatus, UUID sagaId) {
+            OrderEventPayload orderEventPayload, OrderApprovalStatus orderApprovalStatus, OutboxStatus outboxStatus, UUID sagaId) {
         save(OrderOutboxMessage.builder()
                 .id(UUID.randomUUID())
                 .sagaId(sagaId)
@@ -56,7 +57,7 @@ public class OrderOutboxHelper {
                 .payload(createPayload(orderEventPayload))
                 .createdAt(orderEventPayload.getCreatedAt())
                 .processedAt(ZonedDateTime.now(ZoneId.of(UTC)))
-                .paymentStatus(paymentStatus)
+                .orderApprovalStatus(orderApprovalStatus)
                 .outboxStatus(outboxStatus)
                 .build());
     }
@@ -65,7 +66,7 @@ public class OrderOutboxHelper {
         OrderOutboxMessage response = orderOutboxRepository.save(orderOutboxMessage);
         if(response == null) {
             log.error("Could not save OrderOutboxMessage");
-            throw new PaymentDomainException("Could not save OrderOutboxMessage");
+            throw new RestaurantDomainException("Could not save OrderOutboxMessage");
         }
         log.info("OrderOutboxMessage is saved with id: {}", orderOutboxMessage.getId());
     }
@@ -75,7 +76,7 @@ public class OrderOutboxHelper {
             return objectMapper.writeValueAsString(orderEventPayload);
         } catch (JsonProcessingException e) {
             log.error("Could not create OrderEventPayload", e);
-            throw new PaymentDomainException("Could not create OrderEventPayload", e);
+            throw new RestaurantDomainException("Could not create OrderEventPayload", e);
         }
     }
 

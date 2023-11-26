@@ -1,8 +1,8 @@
-package github.alessandrofazio.payment.dataaccess.outbox.repository;
+package github.alessandrofazio.restaurant.service.dataaccess.restaurant.outbox.repository;
 
-import github.alessandrofazio.domain.valueobject.PaymentStatus;
+import github.alessandrofazio.domain.valueobject.OrderApprovalStatus;
 import github.alessandrofazio.outbox.OutboxStatus;
-import github.alessandrofazio.payment.dataaccess.outbox.entity.OrderOutboxEntity;
+import github.alessandrofazio.restaurant.service.dataaccess.restaurant.outbox.entity.OrderOutboxEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,10 +12,10 @@ import java.util.UUID;
 
 @Repository
 public interface OrderOutboxJpaRepository extends JpaRepository<OrderOutboxEntity, UUID> {
-    List<OrderOutboxEntity>  findByTypeAndOutboxStatus(String type, OutboxStatus outboxStatus);
+    List<OrderOutboxEntity> findByTypeAndOutboxStatus(String type, OutboxStatus outboxStatus);
 
-    Optional<OrderOutboxEntity> findByTypeAndSagaIdAndPaymentStatusAndOutboxStatus(
-            String type, UUID sagaId, PaymentStatus paymentStatus, OutboxStatus outboxStatus);
+    Optional<OrderOutboxEntity> findByTypeAndSagaIdAndOutboxStatus(
+            String type, UUID sagaId, OutboxStatus outboxStatus);
 
     void deleteByTypeAndOutboxStatus(String type, OutboxStatus outboxStatus);
 }

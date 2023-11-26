@@ -1,6 +1,4 @@
-package github.alessandrofazio.customer.service.domain.entity;
-
-import github.alessandrofazio.domain.utils.Builder;
+package github.alessandrofazio.order.service.domain.entity;
 
 public class CustomerInformation {
     private final String firstName;

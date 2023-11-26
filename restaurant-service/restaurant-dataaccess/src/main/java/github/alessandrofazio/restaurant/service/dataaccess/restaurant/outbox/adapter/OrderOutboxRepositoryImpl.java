@@ -1,13 +1,13 @@
-package github.alessandrofazio.payment.dataaccess.outbox.adapter;
+package github.alessandrofazio.restaurant.service.dataaccess.restaurant.outbox.adapter;
 
-import github.alessandrofazio.domain.valueobject.PaymentStatus;
+import github.alessandrofazio.domain.valueobject.OrderApprovalStatus;
 import github.alessandrofazio.outbox.OutboxStatus;
-import github.alessandrofazio.payment.dataaccess.outbox.entity.OrderOutboxEntity;
-import github.alessandrofazio.payment.dataaccess.outbox.exception.OrderOutboxNotFoundException;
-import github.alessandrofazio.payment.dataaccess.outbox.mapper.OrderOutboxDataMapper;
-import github.alessandrofazio.payment.dataaccess.outbox.repository.OrderOutboxJpaRepository;
-import github.alessandrofazio.payment.service.domain.outbox.model.OrderOutboxMessage;
-import github.alessandrofazio.payment.service.domain.ports.output.repository.OrderOutboxRepository;
+import github.alessandrofazio.restaurant.service.dataaccess.restaurant.outbox.entity.OrderOutboxEntity;
+import github.alessandrofazio.restaurant.service.dataaccess.restaurant.outbox.exception.OrderOutboxNotFoundException;
+import github.alessandrofazio.restaurant.service.dataaccess.restaurant.outbox.mapper.OrderOutboxDataMapper;
+import github.alessandrofazio.restaurant.service.dataaccess.restaurant.outbox.repository.OrderOutboxJpaRepository;
+import github.alessandrofazio.restaurant.service.domain.outbox.model.OrderOutboxMessage;
+import github.alessandrofazio.restaurant.service.domain.ports.output.repository.OrderOutboxRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -15,6 +15,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class OrderOutboxRepositoryImpl implements OrderOutboxRepository {
@@ -30,9 +32,9 @@ public class OrderOutboxRepositoryImpl implements OrderOutboxRepository {
     }
 
     @Override
-    public Optional<OrderOutboxMessage> findByTypeAndSagaIdAndPaymentStatusAndOutboxStatus(String type, UUID sagaId, PaymentStatus paymentStatus, OutboxStatus outboxStatus) {
-        return orderOutboxJpaRepository.findByTypeAndSagaIdAndPaymentStatusAndOutboxStatus(
-                type, sagaId, paymentStatus, outboxStatus)
+    public Optional<OrderOutboxMessage> findByTypeAndSagaIdAndOutboxStatus(
+            String type, UUID sagaId, OutboxStatus outboxStatus) {
+        return orderOutboxJpaRepository.findByTypeAndSagaIdAndOutboxStatus(type, sagaId, outboxStatus)
                 .map(orderOutboxDataMapper::OrderOutboxEntityToOrderOutboxMessage);
     }
 
@@ -42,8 +44,8 @@ public class OrderOutboxRepositoryImpl implements OrderOutboxRepository {
                 orderOutboxJpaRepository.findByTypeAndOutboxStatus(type, outboxStatus);
 
         if(orderOutboxEntities.isEmpty()) {
-            throw new OrderOutboxNotFoundException(
-                    "Approval outbox object cannot be found for saga type: " + type);
+            log.debug("Approval outbox object cannot be found for saga type: " + type);
+
         }
         return orderOutboxEntities.stream()
                 .map(orderOutboxDataMapper::OrderOutboxEntityToOrderOutboxMessage)

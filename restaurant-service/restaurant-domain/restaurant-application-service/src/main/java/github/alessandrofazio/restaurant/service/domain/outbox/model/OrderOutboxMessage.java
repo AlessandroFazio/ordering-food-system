@@ -1,6 +1,6 @@
-package github.alessandrofazio.restaurant.service.domain;
+package github.alessandrofazio.restaurant.service.domain.outbox.model;
 
-import github.alessandrofazio.domain.valueobject.PaymentStatus;
+import github.alessandrofazio.domain.valueobject.OrderApprovalStatus;
 import github.alessandrofazio.outbox.OutboxStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +20,7 @@ public class OrderOutboxMessage {
     private ZonedDateTime processedAt;
     private String type;
     private String payload;
-    private PaymentStatus paymentStatus;
+    private OrderApprovalStatus orderApprovalStatus;
     private OutboxStatus outboxStatus;
     private int version;
 

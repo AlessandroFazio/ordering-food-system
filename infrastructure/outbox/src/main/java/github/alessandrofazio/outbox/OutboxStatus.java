@@ -1,2 +1,7 @@
-package github.alessandrofazio.outbox;public class OutboxStatus {
+package github.alessandrofazio.outbox;
+
+public enum OutboxStatus {
+    STARTED,
+    COMPLETED,
+    FAILED
 }

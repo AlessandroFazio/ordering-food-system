@@ -1,22 +1,22 @@
 package github.alessandrofazio.service.domain.mapper;
 
-import github.alessandrofazio.domain.valueobject.CustomerId;
-import github.alessandrofazio.domain.valueobject.Money;
-import github.alessandrofazio.domain.valueobject.ProductId;
-import github.alessandrofazio.domain.valueobject.RestaurantId;
-import github.alessandrofazio.order.service.domain.entity.Order;
-import github.alessandrofazio.order.service.domain.entity.OrderItem;
-import github.alessandrofazio.order.service.domain.entity.Product;
-import github.alessandrofazio.order.service.domain.entity.Restaurant;
+import github.alessandrofazio.domain.valueobject.*;
+import github.alessandrofazio.order.service.domain.entity.*;
+import github.alessandrofazio.order.service.domain.event.OrderCancelledEvent;
+import github.alessandrofazio.order.service.domain.event.OrderCreatedEvent;
+import github.alessandrofazio.order.service.domain.event.OrderPaidEvent;
 import github.alessandrofazio.order.service.domain.valueobject.StreetAddress;
 import github.alessandrofazio.service.domain.dto.create.CreateOrderCommand;
 import github.alessandrofazio.service.domain.dto.create.CreateOrderResponse;
 import github.alessandrofazio.service.domain.dto.create.OrderAddress;
+import github.alessandrofazio.service.domain.dto.message.CustomerModel;
 import github.alessandrofazio.service.domain.dto.track.TrackOrderResponse;
+import github.alessandrofazio.service.domain.outbox.model.approval.OrderApprovalEventPayload;
+import github.alessandrofazio.service.domain.outbox.model.approval.OrderApprovalEventProduct;
+import github.alessandrofazio.domain.event.payload.OrderPaymentEventPayload;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -74,5 +74,51 @@ public class OrderDataMapper {
                 .orderStatus(order.getOrderStatus())
                 .failureMessages(order.getFailureMessages())
                 .build();
+    }
+
+    public OrderPaymentEventPayload orderCreatedEventToOrderPaymentEventPayload(
+            OrderCreatedEvent orderCreatedEvent) {
+        return OrderPaymentEventPayload.builder()
+                .customerId(orderCreatedEvent.getOrder().getCustomerId().getValue().toString())
+                .orderId(orderCreatedEvent.getOrder().getId().getValue().toString())
+                .createdAt(orderCreatedEvent.getCreatedAt())
+                .price(orderCreatedEvent.getOrder().getPrice().getAmount())
+                .paymentOrderStatus(PaymentOrderStatus.PENDING.name())
+                .build();
+    }
+
+    public OrderApprovalEventPayload orderPaidEventToOrderApprovalEventPayload(OrderPaidEvent orderPaidEvent) {
+        return OrderApprovalEventPayload.builder()
+                .orderId(orderPaidEvent.getOrder().getId().getValue().toString())
+                .restaurantId(orderPaidEvent.getOrder().getRestaurantId().getValue().toString())
+                .restaurantOrderStatus(RestaurantOrderStatus.PAID.name())
+                .products(orderPaidEvent.getOrder().getItems().stream().map(orderItem ->
+                        OrderApprovalEventProduct.builder()
+                                .id(orderItem.getProduct().getId().getValue().toString())
+                                .quantity(orderItem.getQuantity())
+                                .build()).toList())
+                .createdAt(orderPaidEvent.getCreatedAt())
+                .price(orderPaidEvent.getOrder().getPrice().getAmount())
+                .build();
+    }
+
+    public OrderPaymentEventPayload orderCancelledToOrderPaymentEventPayload(OrderCancelledEvent orderCancelledEvent) {
+        return OrderPaymentEventPayload.builder()
+                .orderId(orderCancelledEvent.getOrder().getId().getValue().toString())
+                .customerId(orderCancelledEvent.getOrder().getCustomerId().getValue().toString())
+                .price(orderCancelledEvent.getOrder().getPrice().getAmount())
+                .createdAt(orderCancelledEvent.getCreatedAt())
+                .paymentOrderStatus(PaymentOrderStatus.CANCELLED.name())
+                .build();
+    }
+
+    public Customer CustomerModelToCustomer(CustomerModel customerModel) {
+        return new Customer(
+                new CustomerId(UUID.fromString(customerModel.getId())),
+                new Username(customerModel.getUsername()),
+                CustomerInformation.builder()
+                        .firstName(customerModel.getFirstName())
+                        .lastName(customerModel.getLastName())
+                        .build());
     }
 }

@@ -4,6 +4,7 @@ import github.alessandrofazio.order.data.access.customer.mapper.CustomerDataAcce
 import github.alessandrofazio.order.data.access.customer.repository.CustomerJpaRepository;
 import github.alessandrofazio.order.service.domain.entity.Customer;
 import github.alessandrofazio.service.domain.ports.output.repository.CustomerRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -21,5 +22,13 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     public Optional<Customer> findCustomer(UUID customerId) {
         return customerJpaRepository.findById(customerId)
                 .map(customerDataAccessMapper::customerEntityToCustomer);
+    }
+
+    @Override
+    @Transactional
+    public Customer save(Customer customer) {
+        return customerDataAccessMapper.customerEntityToCustomer(
+                customerJpaRepository.save(
+                        customerDataAccessMapper.customerToCustomerEntity(customer)));
     }
 }

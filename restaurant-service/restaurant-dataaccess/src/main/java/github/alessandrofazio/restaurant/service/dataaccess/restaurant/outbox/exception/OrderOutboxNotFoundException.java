@@ -1,4 +1,4 @@
-package github.alessandrofazio.payment.dataaccess.outbox.exception;
+package github.alessandrofazio.restaurant.service.dataaccess.restaurant.outbox.exception;
 
 public class OrderOutboxNotFoundException extends RuntimeException {
     public OrderOutboxNotFoundException(String message) {

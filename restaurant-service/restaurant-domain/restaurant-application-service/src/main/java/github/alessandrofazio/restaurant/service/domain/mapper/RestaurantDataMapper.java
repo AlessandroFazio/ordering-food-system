@@ -5,6 +5,9 @@ import github.alessandrofazio.restaurant.service.domain.dto.RestaurantApprovalRe
 import github.alessandrofazio.restaurant.service.domain.entity.OrderDetail;
 import github.alessandrofazio.restaurant.service.domain.entity.Product;
 import github.alessandrofazio.restaurant.service.domain.entity.Restaurant;
+import github.alessandrofazio.restaurant.service.domain.event.OrderApprovalEvent;
+import github.alessandrofazio.restaurant.service.domain.outbox.model.OrderEventPayload;
+import github.alessandrofazio.restaurant.service.domain.outbox.model.OrderOutboxMessage;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -24,6 +27,16 @@ public class RestaurantDataMapper {
                         .totalAmount(new Money(restaurantApprovalRequest.getPrice()))
                         .orderStatus(OrderStatus.valueOf(restaurantApprovalRequest.getRestaurantOrderStatus().name()))
                         .build())
+                .build();
+    }
+
+    public OrderEventPayload orderApprovalEventToOrderEventPayload(OrderApprovalEvent orderApprovalEvent) {
+        return OrderEventPayload.builder()
+                .restaurantId(orderApprovalEvent.getRestaurantId().getValue().toString())
+                .orderId(orderApprovalEvent.getOrderApproval().getOrderId().getValue().toString())
+                .orderApprovalStatus(orderApprovalEvent.getOrderApproval().getOrderApprovalStatus().name())
+                .createdAt(orderApprovalEvent.getCreatedAt())
+                .failureMessages(orderApprovalEvent.getFailureMessages())
                 .build();
     }
 }

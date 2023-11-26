@@ -2,6 +2,7 @@ package github.alessandrofazio.kafka.consumer.config;
 
 import github.alessandrofazio.kafka.config.data.KafkaConfigData;
 import github.alessandrofazio.kafka.config.data.KafkaConsumerConfigData;
+import io.confluent.kafka.serializers.KafkaAvroDeserializerConfig;
 import lombok.RequiredArgsConstructor;
 import org.apache.avro.specific.SpecificRecordBase;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -39,6 +40,8 @@ public class KafkaConsumerConfig<K extends Serializable, V extends SpecificRecor
         props.put(ConsumerConfig.MAX_PARTITION_FETCH_BYTES_CONFIG,
                 kafkaConsumerConfigData.getMaxPartitionFetchBytesDefault() *
                 kafkaConsumerConfigData.getMaxPartitionFetchBytesBoostFactor());
+        props.put(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG,
+                kafkaConsumerConfigData.getSpecificAvroReader());
         return props;
     }
 

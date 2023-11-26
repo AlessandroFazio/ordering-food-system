@@ -48,6 +48,11 @@
         <dependencies>
             <dependency>
                 <groupId>github.alessandrofazio</groupId>
+                <artifactId>saga</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>github.alessandrofazio</groupId>
                 <artifactId>order-domain-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -69,6 +74,11 @@
             <dependency>
                 <groupId>github.alessandrofazio</groupId>
                 <artifactId>order-messaging</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>github.alessandrofazio</groupId>
+                <artifactId>common-messaging</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -127,10 +137,29 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-core</artifactId>
-                <version>${mockito.version}</version>
-                <scope>test</scope>
+                <groupId>github.alessandrofazio</groupId>
+                <artifactId>customer-application</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>github.alessandrofazio</groupId>
+                <artifactId>customer-domain-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>github.alessandrofazio</groupId>
+                <artifactId>customer-application-service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>github.alessandrofazio</groupId>
+                <artifactId>customer-dataaccess</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>github.alessandrofazio</groupId>
+                <artifactId>customer-messaging</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>github.alessandrofazio</groupId>
@@ -151,6 +180,17 @@
                 <groupId>github.alessandrofazio</groupId>
                 <artifactId>kafka-config-data</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>github.alessandrofazio</groupId>
+                <artifactId>outbox</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>${mockito.version}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

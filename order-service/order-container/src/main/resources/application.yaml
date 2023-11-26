@@ -13,22 +13,20 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres?currentSchema=order&binaryTransfer=true&reWriteBatchedInserts=true&stringtype=unspecified
-    username: postgres
-    password: admin
+    username: order_service
+    password: order_password
     driver-class-name: org.postgresql.Driver
-  sql:
-    init:
-      mode: always
-      schema-locations:
-        - classpath:sql/init-schema.sql
 
 order-service:
-  payment-request-topic-name: payment-request
-  payment-response-topic-name: payment-response
-  restaurant-approval-request-topic-name: restaurant-approval-request
-  restaurant-approval-response-topic-name: restaurant-approval-response
+  payment-request-topic-name: debezium.order.payment_outbox
+  payment-response-topic-name: debezium.payment.order_outbox
+  restaurant-approval-request-topic-name: debezium.order.restaurant_approval_outbox
+  restaurant-approval-response-topic-name: debezium.restaurant.order_outbox
+  customer-topic-name: customer
 
 kafka-config:
   bootstrap-servers: localhost:19092, localhost:29092, localhost:39092

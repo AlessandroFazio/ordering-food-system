@@ -1,2 +1,7 @@
-package github.alessandrofazio.order.data.access.outbox.payment.exception;public class PaymentOutboxNotFoundException {
+package github.alessandrofazio.order.data.access.outbox.payment.exception;
+
+public class PaymentOutboxNotFoundException extends RuntimeException {
+    public PaymentOutboxNotFoundException(String message) {
+        super(message);
+    }
 }

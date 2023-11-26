@@ -1,9 +1,7 @@
-package github.alessandrofazio.restaurant.service.domain.helper;
+package github.alessandrofazio.restaurant.service.domain;
 
 import github.alessandrofazio.domain.valueobject.OrderId;
-import github.alessandrofazio.domain.valueobject.PaymentStatus;
 import github.alessandrofazio.outbox.OutboxStatus;
-import github.alessandrofazio.restaurant.service.domain.RestaurantDomainService;
 import github.alessandrofazio.restaurant.service.domain.dto.RestaurantApprovalRequest;
 import github.alessandrofazio.restaurant.service.domain.entity.Restaurant;
 import github.alessandrofazio.restaurant.service.domain.event.OrderApprovalEvent;
@@ -11,7 +9,6 @@ import github.alessandrofazio.restaurant.service.domain.exception.RestaurantNotF
 import github.alessandrofazio.restaurant.service.domain.mapper.RestaurantDataMapper;
 import github.alessandrofazio.restaurant.service.domain.outbox.model.OrderOutboxMessage;
 import github.alessandrofazio.restaurant.service.domain.outbox.scheduler.OrderOutboxHelper;
-import github.alessandrofazio.restaurant.service.domain.ports.output.message.publisher.RestaurantApprovalResponseMessagePublisher;
 import github.alessandrofazio.restaurant.service.domain.ports.output.repository.OrderApprovalRepository;
 import github.alessandrofazio.restaurant.service.domain.ports.output.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,12 +30,11 @@ public class RestaurantApprovalHelper {
     private final RestaurantDataMapper restaurantDataMapper;
     private final RestaurantRepository restaurantRepository;
     private final OrderApprovalRepository orderApprovalRepository;
-    private final RestaurantApprovalResponseMessagePublisher restaurantApprovalResponseMessagePublisher;
     private final OrderOutboxHelper orderOutboxHelper;
 
     @Transactional
     public void persistOrderApproval(RestaurantApprovalRequest restaurantApprovalRequest) {
-        if(publishIfOutboxMessageProcessedForPayment(restaurantApprovalRequest)) {
+        if(isOutboxMessageProcessed(restaurantApprovalRequest)) {
             log.info("An outbox message with saga id: {} already saved to database",
                     restaurantApprovalRequest.getSagaId());
             return;
@@ -81,17 +77,12 @@ public class RestaurantApprovalHelper {
     }
 
     @Transactional
-    public boolean publishIfOutboxMessageProcessedForPayment(
+    public boolean isOutboxMessageProcessed(
             RestaurantApprovalRequest paymentRequest) {
         Optional<OrderOutboxMessage> orderOutboxResponse =
                 orderOutboxHelper.getCompletedOrderOutboxMessageBySagaIdAndOutboxStatus(
                         UUID.fromString(paymentRequest.getSagaId()), OutboxStatus.COMPLETED);
 
-        if(orderOutboxResponse.isPresent()) {
-            restaurantApprovalResponseMessagePublisher.publish(
-                    orderOutboxResponse.get(), orderOutboxHelper::updateOutboxMessage);
-            return true;
-        }
-        return false;
+        return orderOutboxResponse.isPresent();
     }
 }

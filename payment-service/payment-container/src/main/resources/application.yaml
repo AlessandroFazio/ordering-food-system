@@ -6,8 +6,8 @@ logging:
     github.alessandrofazio: DEBUG
 
 payment-service:
-  payment-request-topic-name: payment-request
-  payment-response-topic-name: payment-response
+  payment-response-topic-name: debezium.payment.order_outbox
+  payment-request-topic-name: debezium.order.payment_outbox
 
 spring:
   jpa:
@@ -17,16 +17,16 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres?currentSchema=payment&binaryTransfer=true&reWriteBatchedInserts=true&stringtype=unspecified
-    username: postgres
-    password: admin
+    username: payment_service
+    password: payment_password
     driver-class-name: org.postgresql.Driver
   sql:
     init:
       mode: always
-      schema-locations:
-        - classpath:sql/init-schema.sql
       data-locations:
         - classpath:sql/init-data.sql
 
@@ -55,7 +55,7 @@ kafka-consumer-config:
   auto-offset-reset: earliest
   specific-avro-reader-key: specific.avro.reader
   specific-avro-reader: true
-  batch-listener: true
+  batch-listener: false
   auto-startup: true
   concurrency-level: 3
   session-timout-ms: 10000

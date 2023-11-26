@@ -1,7 +1,7 @@
-package github.alessandrofazio.payment.dataaccess.outbox.mapper;
+package github.alessandrofazio.restaurant.service.dataaccess.restaurant.outbox.mapper;
 
-import github.alessandrofazio.payment.dataaccess.outbox.entity.OrderOutboxEntity;
-import github.alessandrofazio.payment.service.domain.outbox.model.OrderOutboxMessage;
+import github.alessandrofazio.restaurant.service.dataaccess.restaurant.outbox.entity.OrderOutboxEntity;
+import github.alessandrofazio.restaurant.service.domain.outbox.model.OrderOutboxMessage;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -9,10 +9,11 @@ public class OrderOutboxDataMapper {
     public OrderOutboxMessage OrderOutboxEntityToOrderOutboxMessage(OrderOutboxEntity orderOutboxEntity) {
         return OrderOutboxMessage.builder()
                 .id(orderOutboxEntity.getId())
+                .sagaId(orderOutboxEntity.getSagaId())
                 .payload(orderOutboxEntity.getPayload())
                 .type(orderOutboxEntity.getType())
                 .outboxStatus(orderOutboxEntity.getOutboxStatus())
-                .paymentStatus(orderOutboxEntity.getPaymentStatus())
+                .orderApprovalStatus(orderOutboxEntity.getOrderApprovalStatus())
                 .createdAt(orderOutboxEntity.getCreatedAt())
                 .processedAt(orderOutboxEntity.getProcessedAt())
                 .build();
@@ -21,10 +22,11 @@ public class OrderOutboxDataMapper {
     public OrderOutboxEntity orderOutboxMessageToOrderOutboxEntity(OrderOutboxMessage orderOutboxMessage) {
         return OrderOutboxEntity.builder()
                 .id(orderOutboxMessage.getId())
+                .sagaId(orderOutboxMessage.getSagaId())
                 .payload(orderOutboxMessage.getPayload())
                 .type(orderOutboxMessage.getType())
                 .outboxStatus(orderOutboxMessage.getOutboxStatus())
-                .paymentStatus(orderOutboxMessage.getPaymentStatus())
+                .orderApprovalStatus(orderOutboxMessage.getOrderApprovalStatus())
                 .createdAt(orderOutboxMessage.getCreatedAt())
                 .processedAt(orderOutboxMessage.getProcessedAt())
                 .build();

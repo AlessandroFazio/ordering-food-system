@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface OutboxRepository<T, O, S> {
+public interface OrderServiceOutboxRepository<T, O, S> {
 
     T save(T orderPaymentOutboxMessage);
 

@@ -23,7 +23,15 @@
         </dependency>
         <dependency>
             <groupId>github.alessandrofazio</groupId>
+            <artifactId>common-messaging</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>github.alessandrofazio</groupId>
             <artifactId>kafka-model</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
         </dependency>
     </dependencies>
 
